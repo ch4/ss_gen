@@ -25,7 +25,7 @@ namespace ss_gen {
             string url = textBox4.Text;
             string sessionId = textBox1.Text;
             string result = SSGetNumber(url, sessionId);
-            textBox2.Text += result + "\r\n";
+            textBox2.Text += result + "\r\n\r\n";
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e) {
@@ -50,9 +50,13 @@ namespace ss_gen {
                 //    ValidFor = "2"
                 //};
                 string data =
-                    "CardType=7&CumulativeLimit=11%2E00&IssuerId=1&CPNType=MA&VCardId=3652249&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DBOFA%5F4%5F0%5F31%5F0&SessionId="+sessionId+"&ValidFor=2";
+                    "CardType=7&CumulativeLimit=26%2E00&IssuerId=1&CPNType=MA&VCardId=3652249&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DBOFA%5F4%5F0%5F31%5F0&SessionId="+sessionId+"&ValidFor=2";
                 var responseString = client.UploadString(backendURI, "POST", data);
                 NameValueCollection responseCollection = HttpUtility.ParseQueryString(responseString);
+
+                if (responseCollection["Action"] == "Error") {
+                    return "";
+                }
 
                 string ccStr = responseCollection["PAN"];
                 ccStr = ccStr.Substring(0, 4) + " " + ccStr.Substring(4, 4) + " " + ccStr.Substring(8, 4) + " " +
