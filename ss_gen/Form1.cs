@@ -17,22 +17,15 @@ namespace ss_gen {
             InitializeComponent();
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e) {
-
-        }
-
         private void button1_Click(object sender, EventArgs e) {
             string url = textBox4.Text;
             string sessionId = textBox1.Text;
-            string result = SSGetNumber(url, sessionId);
-            textBox2.Text += result + "\r\n\r\n";
+            string length = numericUpDown1.Value.ToString();
+            string result = SSGetNumber(url, sessionId, length);
+            textBox2.Text += result + "\r\n";
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e) {
-
-        }
-
-        private string SSGetNumber(string backendURI, string sessionId) {
+        private string SSGetNumber(string backendURI, string sessionId, string length) {
 
             using (var client = new WebClient()) {
                 client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -50,7 +43,7 @@ namespace ss_gen {
                 //    ValidFor = "2"
                 //};
                 string data =
-                    "CardType=7&CumulativeLimit=26%2E00&IssuerId=1&CPNType=MA&VCardId=3652249&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DBOFA%5F4%5F0%5F31%5F0&SessionId="+sessionId+"&ValidFor=2";
+                    "CardType=7&CumulativeLimit=26%2E00&IssuerId=1&CPNType=MA&VCardId=3652249&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DBOFA%5F4%5F0%5F31%5F0&SessionId="+sessionId+"&ValidFor="+length;
                 var responseString = client.UploadString(backendURI, "POST", data);
                 NameValueCollection responseCollection = HttpUtility.ParseQueryString(responseString);
 
@@ -63,7 +56,7 @@ namespace ss_gen {
                         ccStr.Substring(12, 4);
                 string expStr = responseCollection["Expiry"];
                 string cvvStr = responseCollection["AVV"];
-                string result = ccStr + "\r\n" + cvvStr + " " + expStr;
+                string result = ccStr + "," + cvvStr + "," + expStr;
 
                 return result;
             }
@@ -71,8 +64,10 @@ namespace ss_gen {
             return "";
         }
 
-        private void textBox4_TextChanged(object sender, EventArgs e) {
-
+        private void button2_Click(object sender, EventArgs e) {
+            for (int i = 0; i < 5; i++) {
+                button1_Click(sender, e);                
+            }
         }
     }
 }
