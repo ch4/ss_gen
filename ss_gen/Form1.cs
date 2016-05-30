@@ -12,9 +12,13 @@ using System.Web;
 using System.Windows.Forms;
 
 namespace ss_gen {
+    public enum CardTypes { BoFA, Citi };
     public partial class Form1 : Form {
+        List<CardTypes> comboChoices = new List<CardTypes> { CardTypes.BoFA, CardTypes.Citi };
+
         public Form1() {
             InitializeComponent();
+            comboBox1.DataSource = comboChoices;
         }
 
         private void button1_Click(object sender, EventArgs e) {
@@ -29,6 +33,7 @@ namespace ss_gen {
 
             using (var client = new WebClient()) {
                 client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                string data = "";
                 //var data = new {
                 //    CardType = "7",
                 //    CumulativeLimit = "11.00",
@@ -42,8 +47,30 @@ namespace ss_gen {
                 //    SessionId = sessionId,
                 //    ValidFor = "2"
                 //};
-                string data =
-                    "CardType=7&CumulativeLimit=26%2E00&IssuerId=1&CPNType=MA&VCardId=3652249&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DBOFA%5F4%5F0%5F31%5F0&SessionId="+sessionId+"&ValidFor="+length;
+                if ((CardTypes)comboBox1.SelectedItem == CardTypes.BoFA) {
+                    data =
+                    "CardType=7&CumulativeLimit=26%2E00&IssuerId=1&CPNType=MA&VCardId=3652249&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DBOFA%5F4%5F0%5F31%5F0&SessionId=" + sessionId + "&ValidFor=" + length;
+                }
+                /*
+                    Request:GetCPN
+                    Version:FLEXWEBCARD-CITI_4_0_547_0
+                    Indicator:VANGen
+                    IssuerId:1
+                    CPNType:MA
+                    WebcardType:THIN
+                    ValidFor:2
+                    Locale:en
+                    MsgNo:3
+                    SessionId:xxx
+                    VCardId:6199644
+                    CardType:2542418
+                    CumulativeLimit:21
+                 */
+                if ((CardTypes)comboBox1.SelectedItem == CardTypes.Citi) {
+                    data =
+                    "Indicator=VANGen&WebcardType=THIN&CardType=2542418&CumulativeLimit=21&IssuerId=1&CPNType=MA&VCardId=6199644&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DCITI%5F4%5F0%5F547%5F0&SessionId=" + sessionId + "&ValidFor=" + length;
+                }
+
                 var responseString = client.UploadString(backendURI, "POST", data);
                 NameValueCollection responseCollection = HttpUtility.ParseQueryString(responseString);
 
