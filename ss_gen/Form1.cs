@@ -25,11 +25,12 @@ namespace ss_gen {
             string url = textBox4.Text;
             string sessionId = textBox1.Text;
             string length = numericUpDown1.Value.ToString();
-            string result = SSGetNumber(url, sessionId, length);
+            string amount = amountUpDown.Value.ToString();
+            string result = SSGetNumber(url, sessionId, length, amount);
             textBox2.Text += result + "\r\n";
         }
 
-        private string SSGetNumber(string backendURI, string sessionId, string length) {
+        private string SSGetNumber(string backendURI, string sessionId, string length, string amount) {
 
             using (var client = new WebClient()) {
                 client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -49,7 +50,7 @@ namespace ss_gen {
                 //};
                 if ((CardTypes)comboBox1.SelectedItem == CardTypes.BoFA) {
                     data =
-                    "CardType=7&CumulativeLimit=26%2E00&IssuerId=1&CPNType=MA&VCardId=3652249&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DBOFA%5F4%5F0%5F31%5F0&SessionId=" + sessionId + "&ValidFor=" + length;
+                    "CardType=7&CumulativeLimit=" + amount + "&IssuerId=1&CPNType=MA&VCardId=3652249&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DBOFA%5F4%5F0%5F31%5F0&SessionId=" + sessionId + "&ValidFor=" + length;
                 }
                 /*
                     Request:GetCPN
@@ -68,7 +69,7 @@ namespace ss_gen {
                  */
                 if ((CardTypes)comboBox1.SelectedItem == CardTypes.Citi) {
                     data =
-                    "Indicator=VANGen&WebcardType=THIN&CardType=2542418&CumulativeLimit=21&IssuerId=1&CPNType=MA&VCardId=6199644&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DCITI%5F4%5F0%5F547%5F0&SessionId=" + sessionId + "&ValidFor=" + length;
+                    "Indicator=VANGen&WebcardType=THIN&CardType=2542418&CumulativeLimit=" + amount + "&IssuerId=1&CPNType=MA&VCardId=6199644&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DCITI%5F4%5F0%5F547%5F0&SessionId=" + sessionId + "&ValidFor=" + length;
                 }
 
                 var responseString = client.UploadString(backendURI, "POST", data);
@@ -83,7 +84,7 @@ namespace ss_gen {
                         ccStr.Substring(12, 4);
                 string expStr = responseCollection["Expiry"];
                 string cvvStr = responseCollection["AVV"];
-                string result = ccStr + "," + cvvStr + "," + expStr;
+                string result = ccStr + "," + cvvStr + "," + expStr + ",$" + amount;
 
                 return result;
             }
