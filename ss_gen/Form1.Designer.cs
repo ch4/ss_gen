@@ -33,6 +33,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.amountUpDown = new System.Windows.Forms.NumericUpDown();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.amountUpDown)).BeginInit();
             this.SuspendLayout();
@@ -61,12 +62,12 @@
             this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(0, 62);
+            this.textBox2.Location = new System.Drawing.Point(0, 88);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(517, 315);
+            this.textBox2.Size = new System.Drawing.Size(517, 289);
             this.textBox2.TabIndex = 2;
             // 
             // textBox4
@@ -138,11 +139,20 @@
             0,
             0});
             // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(12, 62);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(179, 20);
+            this.textBox3.TabIndex = 11;
+            this.textBox3.Text = "Cookie";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(517, 377);
+            this.Controls.Add(this.textBox3);
             this.Controls.Add(this.amountUpDown);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBox1);
@@ -174,6 +184,7 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown amountUpDown;
+        private System.Windows.Forms.TextBox textBox3;
     }
 }
 

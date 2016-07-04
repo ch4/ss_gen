@@ -26,11 +26,12 @@ namespace ss_gen {
             string sessionId = textBox1.Text;
             string length = numericUpDown1.Value.ToString();
             string amount = amountUpDown.Value.ToString();
-            string result = SSGetNumber(url, sessionId, length, amount);
+            string cookie = textBox3.Text;
+            string result = SSGetNumber(url, sessionId, length, amount, cookie:cookie);
             textBox2.Text += result + "\r\n";
         }
 
-        private string SSGetNumber(string backendURI, string sessionId, string length, string amount) {
+        private string SSGetNumber(string backendURI, string sessionId, string length, string amount, string cookie=null) {
 
             using (var client = new WebClient()) {
                 client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
@@ -71,7 +72,9 @@ namespace ss_gen {
                     data =
                     "Indicator=VANGen&WebcardType=THIN&CardType=2542418&CumulativeLimit=" + amount + "&IssuerId=1&CPNType=MA&VCardId=6199644&MsgNo=5&Locale=en&Request=GetCPN&Version=FLEXWEBCARD%2DCITI%5F4%5F0%5F547%5F0&SessionId=" + sessionId + "&ValidFor=" + length;
                 }
-
+                if (cookie != null) {
+                    client.Headers.Add("Cookie", cookie);
+                }
                 var responseString = client.UploadString(backendURI, "POST", data);
                 NameValueCollection responseCollection = HttpUtility.ParseQueryString(responseString);
 
