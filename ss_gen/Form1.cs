@@ -75,6 +75,10 @@ namespace ss_gen {
                 if (cookie != null) {
                     client.Headers.Add("Cookie", cookie);
                 }
+
+                //disable tls1.0
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
                 var responseString = client.UploadString(backendURI, "POST", data);
                 NameValueCollection responseCollection = HttpUtility.ParseQueryString(responseString);
 
